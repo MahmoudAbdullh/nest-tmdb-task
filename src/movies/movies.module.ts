@@ -1,21 +1,25 @@
 import { Module } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 import { MoviesController } from './movies.controller';
-import { Movie, MovieSchema } from './schema/movie.schema';
-import { MongooseModule } from '@nestjs/mongoose';
-import { Vote, VoteSchema } from './schema/vote.schema';
-import { Favorite, FavoriteSchema } from './schema/favorite.schema';
-import { TmdbClientService } from './services/tmdb-client.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { MovieEntity } from './entities/movie.entity';
+import { FavoriteEntity } from './entities/favorite.entity';
+import { VoteEntity } from './entities/vote.entity';
+import { UsersModule } from 'src/users/users.module';
+import { MoviesRepository } from './movies.repository';
+import { GenerEntity } from './entities/gener.entity';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([{ name: Movie.name, schema: MovieSchema }]),
-    MongooseModule.forFeature([{ name: Vote.name, schema: VoteSchema }]),
-    MongooseModule.forFeature([
-      { name: Favorite.name, schema: FavoriteSchema },
+    TypeOrmModule.forFeature([
+      MovieEntity,
+      FavoriteEntity,
+      VoteEntity,
+      GenerEntity,
     ]),
+    UsersModule,
   ],
-  providers: [MoviesService, TmdbClientService],
   controllers: [MoviesController],
+  providers: [MoviesService, MoviesRepository],
 })
 export class MoviesModule {}

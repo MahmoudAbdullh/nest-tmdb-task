@@ -1,7 +1,9 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
-import { CreateMovieDto } from './dto/create-movie.dto';
 import { MoviesService } from './movies.service';
+
+import { CreateMovieDto } from './dto/create-movie.dto';
 import { CreateVoteDto } from './dto/create-vote.dto';
+import { AddFavoriteDto } from './dto/add-favorite.dto';
 
 @Controller('movies')
 export class MoviesController {
@@ -18,10 +20,11 @@ export class MoviesController {
       body.title,
       body.overview,
       body.tmdb_id,
-      body.gener_ids,
+      // body.geners,
     );
   }
 
+  //votes
   @Get('/votes')
   findAllVotes() {
     return this.movieService.findAllVotes();
@@ -30,5 +33,11 @@ export class MoviesController {
   @Post('/vote')
   createVote(@Body() body: CreateVoteDto) {
     return this.movieService.createVote(body.user_id, body.movie_id, body.vote);
+  }
+
+  // fav
+  @Post('/favorite')
+  addFavorite(@Body() body: AddFavoriteDto) {
+    return this.movieService.addFavorite(body.user_id, body.movie_id);
   }
 }

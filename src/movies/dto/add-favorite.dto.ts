@@ -5,10 +5,10 @@ export class AddFavoriteDto {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  user_id: string;
+  user_id: number;
 
   @ApiProperty()
   @IsNotEmpty()
   @IsString()
-  movie_id: string;
+  movie_id: number;
 }

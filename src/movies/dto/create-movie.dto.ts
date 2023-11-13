@@ -12,7 +12,7 @@ export class CreateMovieDto {
 
   @ApiProperty()
   @IsNotEmpty()
-  gener_ids: number[];
+  geners: number[];
 
   @ApiProperty()
   @IsNumber()

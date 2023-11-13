@@ -1,16 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsString, Max, Min } from 'class-validator';
+import { IsNotEmpty, IsNumber, Max, Min } from 'class-validator';
 
 export class CreateVoteDto {
   @ApiProperty()
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
-  user_id: string;
+  user_id: number;
 
   @ApiProperty()
-  @IsString()
+  @IsNumber()
   @IsNotEmpty()
-  movie_id: string;
+  movie_id: number;
 
   @ApiProperty()
   @Min(0)
