@@ -10,8 +10,14 @@ export class UsersController {
   findAll() {
     return this.userService.findAll();
   }
+
+  @Get('/favorites')
+  async getWatchList(id: number) {
+    return this.userService.getWatchList(id);
+  }
+
   @Post()
   addUser(@Body() body: CreateUserDto) {
-    return this.userService.create(body.name, body.email, body.age);
+    return this.userService.create(body);
   }
 }

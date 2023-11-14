@@ -1,43 +1,44 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  DefaultValuePipe,
+  Get,
+  ParseIntPipe,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { MoviesService } from './movies.service';
 
 import { CreateMovieDto } from './dto/create-movie.dto';
-import { CreateVoteDto } from './dto/create-vote.dto';
-import { AddFavoriteDto } from './dto/add-favorite.dto';
+import { CreateFavoriteDto } from 'src/favorites/dto/create-favorite.dto';
 
 @Controller('movies')
 export class MoviesController {
   constructor(private movieService: MoviesService) {}
 
   @Get()
-  findAll() {
-    return this.movieService.findAll();
+  findAll(
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+    @Query('gener_id') gener_id: number,
+    @Query('search') search: string,
+  ) {
+    const filter = { page, limit, gener_id, search };
+    return this.movieService.findAll(filter);
   }
 
   @Post()
   create(@Body() body: CreateMovieDto) {
-    return this.movieService.create(
-      body.title,
-      body.overview,
-      body.tmdb_id,
-      // body.geners,
-    );
+    return this.movieService.create(body);
   }
 
-  //votes
-  @Get('/votes')
-  findAllVotes() {
-    return this.movieService.findAllVotes();
+  @Get('/favorites')
+  getFavorites(@Query('user_id') userId: string) {
+    return this.movieService.getFavorites(+userId);
   }
 
-  @Post('/vote')
-  createVote(@Body() body: CreateVoteDto) {
-    return this.movieService.createVote(body.user_id, body.movie_id, body.vote);
-  }
-
-  // fav
-  @Post('/favorite')
-  addFavorite(@Body() body: AddFavoriteDto) {
-    return this.movieService.addFavorite(body.user_id, body.movie_id);
+  @Post('/add-favorite')
+  addFavorite(@Body() body: CreateFavoriteDto) {
+    return this.movieService.addFavorite(body);
   }
 }

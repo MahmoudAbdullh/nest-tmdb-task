@@ -1,17 +1,20 @@
 import {
   Column,
   Entity,
+  JoinColumn,
+  JoinTable,
   ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { VoteEntity } from './vote.entity';
-import { FavoriteEntity } from './favorite.entity';
-import { GenerEntity } from './gener.entity';
+
+import { Favorite } from 'src/favorites/entities/favorite.entity';
+import { Gener } from 'src/geners/entities/gener.entity';
+import { Vote } from 'src/votes/entities/vote.entity';
 
 @Entity('movie')
-export class MovieEntity {
+export class Movie {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -24,12 +27,14 @@ export class MovieEntity {
   @Column()
   overview: string;
 
-  @ManyToMany(() => GenerEntity, (gener) => gener.movies)
-  geners: GenerEntity[];
+  @ManyToMany(() => Gener, (gener) => gener.movies)
+  @JoinTable()
+  geners: Gener[];
 
-  @OneToMany(() => VoteEntity, (vote) => vote.movie)
-  votes: VoteEntity[];
+  @OneToMany(() => Vote, (vote) => vote.movie)
+  votes: Vote[];
 
-  @ManyToOne(() => FavoriteEntity, (fav) => fav.movie)
-  favorites: FavoriteEntity[];
+  @ManyToOne(() => Favorite, (fav) => fav.movies)
+  @JoinColumn()
+  favorite: Favorite;
 }
