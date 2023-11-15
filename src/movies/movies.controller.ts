@@ -1,30 +1,17 @@
-import {
-  Body,
-  Controller,
-  DefaultValuePipe,
-  Get,
-  ParseIntPipe,
-  Post,
-  Query,
-} from '@nestjs/common';
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
 import { MoviesService } from './movies.service';
 
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { CreateFavoriteDto } from 'src/favorites/dto/create-favorite.dto';
+import { FindMoviesFilter } from './dto/find-movies-filter.dto';
 
 @Controller('movies')
 export class MoviesController {
   constructor(private movieService: MoviesService) {}
 
   @Get()
-  findAll(
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
-    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
-    @Query('gener_id') gener_id: number,
-    @Query('search') search: string,
-  ) {
-    const filter = { page, limit, gener_id, search };
-    return this.movieService.findAll(filter);
+  findAll(@Query() query: FindMoviesFilter) {
+    return this.movieService.findAll(query);
   }
 
   @Post()

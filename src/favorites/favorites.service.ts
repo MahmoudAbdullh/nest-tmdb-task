@@ -29,14 +29,15 @@ export class FavoritesService {
     );
     const fav = await this.repo.findOne({
       where: { user },
-      relations: { movies: true },
     });
-    // TODO check for better update method
     if (!user) throw new NotFoundException('user not exist');
     if (!movie) throw new NotFoundException('movie not exist');
-    if (fav) {
-      fav.movies = [...new Set([...fav.movies, movie])];
-      return this.repo.save(fav);
+    if (!!fav) {
+      return this.repo
+        .createQueryBuilder()
+        .relation(Favorite, 'movies')
+        .of(fav)
+        .add(movie);
     }
     const newFav = this.repo.create({ user, movies: [movie] });
     return this.repo.save(newFav);

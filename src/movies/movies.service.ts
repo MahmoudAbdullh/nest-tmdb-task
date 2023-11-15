@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Movie } from './entities/movie.entity';
-import { Like, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { UsersService } from 'src/users/users.service';
 import { FavoritesService } from 'src/favorites/favorites.service';
@@ -21,14 +21,23 @@ export class MoviesService {
   async findAll(filter: FindMoviesFilter) {
     const query = this.repo
       .createQueryBuilder('movie')
-      .leftJoinAndSelect('movie.votes', 'vote');
+      .leftJoin('movie.votes', 'vote')
+      .leftJoinAndSelect('movie.geners', 'gener');
+    // TODO Rating
+    // .addSelect('AVG(vote.rate)', 'av_rate');
     if (!!filter.search) {
-      query.where('movie.title = :title OR movie.overview = :title', {
-        title: Like(`%${filter.search}%`),
+      query.where('movie.title like :search OR movie.overview like :search ', {
+        search: `%${filter.search}%`,
       });
     }
     if (!!filter.page && !!filter.limit) {
       query.take(filter.limit).skip((filter.page - 1) * filter.limit);
+    }
+    if (!!filter.gener_id) {
+      // TODO Rating
+      // query.where('movie.geners IN (:...gener_id)', {
+      //   gener_id: [{ id: filter.gener_id }],
+      // });
     }
     const [data, count] = await query.getManyAndCount();
     return {

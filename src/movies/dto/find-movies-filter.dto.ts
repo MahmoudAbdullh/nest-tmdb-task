@@ -3,16 +3,25 @@ import { Transform } from 'class-transformer';
 import { IsNumber, IsOptional } from 'class-validator';
 
 export class FindMoviesFilter {
-  @IsOptional()
   @ApiPropertyOptional()
-  search!: string | null;
+  @IsOptional()
+  search: string | null;
 
   @IsNumber()
-  @Transform(({ value }) => +value)
   @ApiPropertyOptional()
-  gener_id!: number;
+  @IsOptional()
+  @Transform(({ value }) => +value)
+  gener_id: number;
 
-  page!: number;
+  @ApiPropertyOptional({ default: 1 })
+  @IsNumber()
+  @Transform(({ value }) => +value)
+  @IsOptional()
+  page: number;
 
-  limit!: number;
+  @ApiPropertyOptional({ default: 10 })
+  @IsNumber()
+  @Transform(({ value }) => +value)
+  @IsOptional()
+  limit: number;
 }
