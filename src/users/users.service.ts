@@ -28,11 +28,4 @@ export class UsersService {
       id,
     });
   }
-
-  async getWatchList(id: number) {
-    // !if we user auth middleware we don't needs to send id of user
-    const user = await this.findOne(id);
-    if (!user) return new BadRequestException('user not found');
-    return this.favoritesService.findAllByUser(user);
-  }
 }
