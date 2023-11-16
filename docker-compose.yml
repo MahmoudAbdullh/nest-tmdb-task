@@ -1,0 +1,45 @@
+version: '3.9'
+
+services:
+  nest-backend:
+    container_name: nest-app
+    image: nest-api
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - ${EXPOSE_PORT}:3000
+    environment:
+      - DATABASE_NAME=${DATABASE_NAME:-movies_tmdb}
+      - PG_HOST=${PG_HOST:-postgres-db}
+      - PG_PORT=${PG_PORT:-5432}
+      - PG_USERNAME=${PG_USERNAME:-postgres}
+      - PG_PASSWORD=${PG_PASSWORD:-password}
+    networks:
+      - backend_network
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+    depends_on:
+      - postgres-db
+  postgres-db:
+    container_name: postgres-db
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=${PG_USERNAME:-postgres}
+      - POSTGRES_PASSWORD=${PG_PASSWORD:-password}
+      - POSTGRES_DB=${DATABASE_NAME:-movies_tmdb}
+    networks:
+      - backend_network
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+networks:
+  backend_network:
+    driver: bridge
+
+volumes:
+  postgres_data: {}

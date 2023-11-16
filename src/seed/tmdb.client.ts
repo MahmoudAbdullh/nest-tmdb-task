@@ -16,8 +16,7 @@ export class TmdbClient {
       method: 'GET',
       headers: {
         accept: 'application/json',
-        Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxMGZjYzJmNWRhZmQ0OTE2NDZiODZmMzViMDYxYmQzMCIsInN1YiI6IjY1NGZjZDU5ZDRmZTA0MDBjNDFlOWQxOCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.lzs6NBe_QZ8rz02LyShUulOFu5aEMl6xif0RMk9UyDo',
+        Authorization: process.env.TMDB_TOKEN,
       },
     };
   }
