@@ -1,6 +1,6 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
-import { IsNumber, IsOptional } from 'class-validator';
+import { IsNumber, IsOptional, Min } from 'class-validator';
 
 export class FindMoviesFilter {
   @ApiPropertyOptional()
@@ -20,6 +20,7 @@ export class FindMoviesFilter {
   page: number;
 
   @ApiPropertyOptional({ default: 10 })
+  @Min(1)
   @IsNumber()
   @Transform(({ value }) => +value)
   @IsOptional()

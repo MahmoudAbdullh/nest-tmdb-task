@@ -18,29 +18,31 @@ export class MoviesService {
     private genersService: GenersService,
   ) {}
 
-  async findAll(filter: FindMoviesFilter) {
+  async findAll({ search, gener_id, page = 1, limit = 10 }: FindMoviesFilter) {
     const query = this.repo
       .createQueryBuilder('movie')
       .leftJoin('movie.votes', 'vote')
       .leftJoinAndSelect('movie.geners', 'gener');
     // TODO Gtting Rating AV()
-    if (!!filter.search) {
+    if (!!search) {
       query.where('movie.title like :search OR movie.overview like :search ', {
-        search: `%${filter.search}%`,
+        search: `%${search}%`,
       });
     }
-    if (!!filter.page && !!filter.limit) {
-      query.take(filter.limit).skip((filter.page - 1) * filter.limit);
-    }
-    if (!!filter.gener_id) {
+    if (!!gener_id) {
       // TODO Filter with gener ID
     }
+
+    if (!!page && !!limit) {
+      query.take(limit).skip((page - 1) * limit);
+    }
+
     const [data, count] = await query.getManyAndCount();
     return {
       data,
       meta: {
-        page: filter.page,
-        limit: filter.limit,
+        page: page || 1,
+        limit,
         total: count,
       },
     };
