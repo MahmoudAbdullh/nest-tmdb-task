@@ -23,8 +23,7 @@ export class MoviesService {
       .createQueryBuilder('movie')
       .leftJoin('movie.votes', 'vote')
       .leftJoinAndSelect('movie.geners', 'gener');
-    // TODO Rating
-    // .addSelect('AVG(vote.rate)', 'av_rate');
+    // TODO Gtting Rating AV()
     if (!!filter.search) {
       query.where('movie.title like :search OR movie.overview like :search ', {
         search: `%${filter.search}%`,
@@ -34,10 +33,7 @@ export class MoviesService {
       query.take(filter.limit).skip((filter.page - 1) * filter.limit);
     }
     if (!!filter.gener_id) {
-      // TODO Rating
-      // query.where('movie.geners IN (:...gener_id)', {
-      //   gener_id: [{ id: filter.gener_id }],
-      // });
+      // TODO Filter with gener ID
     }
     const [data, count] = await query.getManyAndCount();
     return {
