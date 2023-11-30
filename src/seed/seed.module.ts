@@ -12,6 +12,7 @@ import { SeedService } from './seed.service';
 import { UsersSeeder } from './users.seeder';
 import { GenersSeeder } from './geners.seeder';
 import { MoviesSeeder } from './movies.seeder';
+import { TmdbClient } from './tmdb.client';
 
 @Module({
   imports: [
@@ -19,6 +20,6 @@ import { MoviesSeeder } from './movies.seeder';
     TypeOrmModule.forFeature([User, Favorite, Gener, Vote, Movie]),
   ],
   controllers: [],
-  providers: [SeedService, UsersSeeder, GenersSeeder, MoviesSeeder],
+  providers: [SeedService, UsersSeeder, GenersSeeder, MoviesSeeder, TmdbClient],
 })
 export class SeedModule {}

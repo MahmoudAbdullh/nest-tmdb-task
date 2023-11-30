@@ -1,5 +1,6 @@
+import { Injectable } from '@nestjs/common';
 import { IGener } from './seeder.interface';
-
+@Injectable()
 export class TmdbClient {
   private baseUrl: string;
   private options: {
@@ -16,7 +17,7 @@ export class TmdbClient {
       method: 'GET',
       headers: {
         accept: 'application/json',
-        Authorization: process.env.TMDB_TOKEN,
+        Authorization: `Bearer ${process.env.TMDB_TOKEN}`,
       },
     };
   }

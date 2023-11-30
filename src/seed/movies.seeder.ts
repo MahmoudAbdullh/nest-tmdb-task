@@ -15,11 +15,11 @@ export class MoviesSeeder implements SeederInterface {
     private readonly movieRepository: Repository<Movie>,
     @InjectRepository(Gener)
     private readonly generRepository: Repository<Gener>,
+    private readonly tmdbClient: TmdbClient,
   ) {}
 
   async seed() {
-    const tmdbClient = new TmdbClient();
-    const movies: IMovie[] = await tmdbClient.loadMovies();
+    const movies: IMovie[] = await this.tmdbClient.loadMovies();
 
     await Bluebird.each(movies, async (movie: IMovie) => {
       // get geners

@@ -10,11 +10,11 @@ export class GenersSeeder implements SeederInterface {
   constructor(
     @InjectRepository(Gener)
     private readonly generRepository: Repository<Gener>,
+    private readonly tmdbClient: TmdbClient,
   ) {}
 
   async seed() {
-    const tmdbClient = new TmdbClient();
-    const geners = await tmdbClient.loadGeners();
+    const geners = await this.tmdbClient.loadGeners();
     await this.generRepository.insert(geners);
   }
 }
